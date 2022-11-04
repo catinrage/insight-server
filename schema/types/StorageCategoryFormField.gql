@@ -1,0 +1,52 @@
+# Definition
+type StorageCategoryFormField {
+  id: ID!
+  name: String!
+  label: String!
+  type: GenericValueType!
+  required: Boolean!
+  default: String!
+  format: String!
+  properties: Object
+  categories: [StorageCategory!]!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  GetStorageCategoryFormField(id: Int!): StorageCategoryFormField
+  ListStorageCategoryFormFields(
+    skip: Int!
+    take: Int!
+    orderBy: String!
+    orderType: String!
+  ): [StorageCategoryFormField!]!
+  SearchStorageCategoryFormFieldsByName(
+    keyword: String!
+  ): [StorageCategoryFormField!]!
+}
+# Mutations
+union StorageCategoryFormFieldMutationResponse =
+    StorageCategoryFormField
+  | Error
+input StorageCategoryFormFieldMutationInput {
+  name: String!
+  label: String!
+  type: GenericValueType!
+  required: Boolean!
+  default: String!
+  format: String!
+  properties: Object
+}
+extend type Mutation {
+  CreateStorageCategoryFormField(
+    input: StorageCategoryFormFieldMutationInput!
+  ): StorageCategoryFormFieldMutationResponse!
+  UpdateStorageCategoryFormField(
+    id: Int!
+    input: StorageCategoryFormFieldMutationInput!
+  ): StorageCategoryFormFieldMutationResponse!
+  DeleteStorageCategoryFormField(
+    id: Int!
+  ): StorageCategoryFormFieldMutationResponse!
+}

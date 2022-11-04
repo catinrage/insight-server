@@ -1,0 +1,36 @@
+# Definition
+type StorageCategory {
+  id: ID!
+  name: String!
+  parent: StorageCategory
+  fields: [StorageCategoryFormField!]!
+  inheritedFields: [StorageCategoryFormField!]!
+  children: [StorageCategory!]!
+  items: [StorageItem!]!
+  nestedItems: [StorageItem!]!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  GetStorageCategory(id: Int!): StorageCategory
+  ListStorageCategories: [StorageCategory!]!
+  SearchStorageCategoriesByName(keyword: String!): [StorageCategory!]!
+}
+# Mutations
+union StorageCategoryMutationResponse = StorageCategory | Error
+input StorageCategoryMutationInput {
+  name: String!
+  parentId: Int
+  fields: [Int!]!
+}
+extend type Mutation {
+  CreateStorageCategory(
+    input: StorageCategoryMutationInput!
+  ): StorageCategoryMutationResponse!
+  UpdateStorageCategory(
+    id: Int!
+    input: StorageCategoryMutationInput!
+  ): StorageCategoryMutationResponse!
+  DeleteStorageCategory(id: Int!): StorageCategoryMutationResponse!
+}

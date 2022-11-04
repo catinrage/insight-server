@@ -1,0 +1,29 @@
+# Definition
+type StorageItemRecord {
+  id: ID!
+  item: StorageItem!
+  quantity: Int!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  ListStorageItemRecords: [StorageItemRecord!]!
+  GetStorageItemRecord(id: Int!): StorageItemRecord!
+}
+# Mutations
+union StorageItemRecordMutationResponse = StorageItemRecord | Error
+input StorageItemRecordMutationInput {
+  item: Int!
+  quantity: Int!
+}
+extend type Mutation {
+  CreateStorageItemRecord(
+    input: StorageItemRecordMutationInput!
+  ): StorageItemRecordMutationResponse!
+  UpdateStorageItemRecord(
+    id: Int!
+    input: StorageItemRecordMutationInput!
+  ): StorageItemRecordMutationResponse!
+  DeleteStorageItemRecord(id: Int!): StorageItemRecordMutationResponse!
+}

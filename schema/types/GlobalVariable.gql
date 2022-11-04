@@ -1,0 +1,33 @@
+# Definition
+type GlobalVariable {
+  id: ID!
+  name: String!
+  type: GenericValueType!
+  value: String!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  GetGlobalVariable(id: Int!): GlobalVariable
+  GetGlobalVariableByName(name: String!): GlobalVariable
+  ListGlobalVariables: [GlobalVariable!]!
+  SearchGlobalVariablesByName(keyword: String!): [GlobalVariable!]!
+}
+# Mutations
+union GlobalVariableMutationResponse = GlobalVariable | Error
+input GlobalVariableMutationInput {
+  name: String!
+  type: GenericValueType!
+  value: String!
+}
+extend type Mutation {
+  CreateGlobalVariable(
+    input: GlobalVariableMutationInput!
+  ): GlobalVariableMutationResponse!
+  UpdateGlobalVariable(
+    id: Int!
+    input: GlobalVariableMutationInput!
+  ): GlobalVariableMutationResponse!
+  DeleteGlobalVariable(id: Int!): GlobalVariableMutationResponse!
+}

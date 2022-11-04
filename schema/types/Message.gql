@@ -1,0 +1,36 @@
+# Definition
+type Message {
+  id: ID!
+  type: MessageImportanceType!
+  title: String!
+  content: String!
+  seen: Boolean!
+  sender: User!
+  recipient: User!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+union MessagesListQueryResponse = MessagesList | Error
+union MessageQueryResponse = Message | Error
+type MessagesList {
+  list: [Message!]!
+}
+extend type Query {
+  GetMessage(id: Int!): MessageQueryResponse
+  ListMessages: MessagesListQueryResponse
+  GetMyMessages: [Message!]!
+}
+# Mutations
+union MessageMutationResponse = Message | Error
+input MessageMutationInput {
+  type: MessageImportanceType!
+  content: String!
+  senderId: Int!
+  recipientId: Int!
+}
+extend type Mutation {
+  CreateMessage(input: MessageMutationInput!): MessageMutationResponse!
+  DeleteMessage(id: Int!): MessageMutationResponse!
+  MarkMessageAsSeen: MessageMutationResponse!
+}

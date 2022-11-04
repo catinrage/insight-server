@@ -1,0 +1,25 @@
+# Definition
+type Role {
+  id: ID!
+  name: String!
+  permissions: [PermissionType!]!
+  users: [Role]!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  GetRole(id: Int!): Role!
+  ListRoles: [Role!]!
+}
+# Mutations
+union RoleMutationResponse = Role | Error
+input RoleMutationInput {
+  name: String!
+  permissions: [PermissionType!]!
+}
+extend type Mutation {
+  CreateRole(input: RoleMutationInput!): RoleMutationResponse!
+  UpdateRole(id: Int!, input: RoleMutationInput!): RoleMutationResponse!
+  DeleteRole(id: Int!): RoleMutationResponse!
+}

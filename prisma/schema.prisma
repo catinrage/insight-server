@@ -1,0 +1,204 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+  role     Role   @relation(fields: [roleId], references: [id], onDelete: Restrict)
+
+  logs             Log[]
+  sentMessages     Message[] @relation(name: "SentMessages")
+  receivedMessages Message[] @relation(name: "ReceivedMessages")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  roleId Int
+}
+
+model Role {
+  id          Int    @id @default(autoincrement())
+  name        String @unique @db.VarChar(255)
+  permissions Json   @default("[]")
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StorageCategory {
+  id     Int                                         @id @default(autoincrement())
+  name   String                                      @db.VarChar(255)
+  parent StorageCategory?                            @relation(name: "BloodLine", fields: [parentId], references: [id], onDelete: Cascade)
+  fields StorageCategoryOnStorageCategoryFormField[]
+
+  children StorageCategory[] @relation(name: "BloodLine")
+  items    StorageItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parentId Int?
+
+  @@unique([name, parentId])
+}
+
+model StorageCategoryFormField {
+  id         Int              @id @default(autoincrement())
+  name       String           @unique @db.VarChar(255)
+  label      String           @db.VarChar(255)
+  type       GenericValueType
+  required   Boolean          @default(true)
+  default    String?          @default("") @db.VarChar(255)
+  format     String?          @default("") @db.VarChar(255)
+  properties Json?            @default("{}")
+
+  categories StorageCategoryOnStorageCategoryFormField[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StorageCategoryOnStorageCategoryFormField {
+  category   StorageCategory          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+  field      StorageCategoryFormField @relation(fields: [fieldId], references: [id], onDelete: Restrict)
+  fieldId    Int
+
+  order Int @default(0)
+
+  @@id([categoryId, fieldId])
+}
+
+model StorageItem {
+  id         Int             @id @default(autoincrement())
+  category   StorageCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  properties Json            @default("{}")
+  quantity   Int             @default(0)
+  flags      Json?           @default("[]")
+
+  records      StorageItemRecord[]
+  controllers  StorageItemControllerInstance[]
+  lhsRelations StorageItemRelation[]           @relation(name: "LhsRelations")
+  rhsRelations StorageItemRelation[]           @relation(name: "RhsRelations")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categoryId Int
+}
+
+model StorageItemRelation {
+  id     Int         @id @default(autoincrement())
+  name   String      @unique @db.VarChar(255)
+  mutual Boolean     @default(false)
+  lhs    StorageItem @relation(name: "LhsRelations", fields: [lhsItemId], references: [id], onDelete: Cascade)
+  rhs    StorageItem @relation(name: "RhsRelations", fields: [rhsItemId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lhsItemId Int
+  rhsItemId Int
+}
+
+model StorageItemControllerBlueprint {
+  id     Int    @id @default(autoincrement())
+  name   String @unique @db.VarChar(255)
+  script String @db.VarChar(2000)
+
+  instances StorageItemControllerInstance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StorageItemControllerInstance {
+  id        Int                            @id @default(autoincrement())
+  blueprint StorageItemControllerBlueprint @relation(fields: [blueprintId], references: [id], onDelete: Restrict)
+  parameter Json                           @default("{}")
+
+  items StorageItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  blueprintId Int
+}
+
+model StorageItemRecord {
+  id       Int         @id @default(autoincrement())
+  item     StorageItem @relation(fields: [itemId], references: [id], onDelete: NoAction)
+  quantity Int         @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  itemId Int
+}
+
+model GlobalVariable {
+  id    Int              @id @default(autoincrement())
+  name  String           @unique @db.VarChar(255)
+  type  GenericValueType
+  value String           @db.VarChar(2000)
+}
+
+model Log {
+  id      Int     @id @default(autoincrement())
+  type    LogType @default(NOTE)
+  message String  @db.VarChar(512)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: NoAction)
+
+  createdAt DateTime @default(now())
+
+  userId Int
+}
+
+model Message {
+  id        Int                   @id @default(autoincrement())
+  type      MessageImportanceType
+  title     String                @default("Untitled")
+  content   String                @db.VarChar(2000)
+  seen      Boolean               @default(false)
+  sender    User                  @relation(name: "SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient User                  @relation(name: "ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  senderId    Int
+  recipientId Int
+}
+
+enum GenericValueType {
+  STRING
+  NUMBER
+  BOOLEAN
+  LIST
+}
+
+enum LogType {
+  NOTE
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+enum MessageImportanceType {
+  URGENT
+  IMPORTANT
+  ROUTINE
+}

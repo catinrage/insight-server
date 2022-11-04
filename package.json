@@ -1,0 +1,35 @@
+{
+  "name": "insight-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "init": "npx prisma generate",
+    "dev": "nodemon server.js"
+  },
+  "author": "catinrage",
+  "license": "ISC",
+  "dependencies": {
+    "@graphql-tools/schema": "^8.3.1",
+    "@prisma/client": "^4.1.1",
+    "apollo-server-core": "^3.10.0",
+    "apollo-server-express": "^3.10.0",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0",
+    "graphql-import-files": "^1.0.18",
+    "graphql-middleware": "^6.1.32",
+    "graphql-shield": "^7.5.0",
+    "graphql-type-json": "^0.3.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19",
+    "prisma": "^4.3.1"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  }
+}

@@ -1,0 +1,33 @@
+# Definition
+type StorageItemRelation {
+  id: ID!
+  name: String!
+  mutual: Boolean!
+  lhs: StorageItem!
+  rhs: StorageItem!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  ListStorageItemRelations: [StorageItemRelation!]!
+  GetStorageItemRelation(id: Int!): StorageItemRelation!
+}
+# Mutations
+union StorageItemRelationMutationResponse = StorageItemRelation | Error
+input StorageItemRelationMutationInput {
+  name: String!
+  mutual: Boolean!
+  lhsItemId: Int!
+  rhsItemId: Int!
+}
+extend type Mutation {
+  CreateStorageItemRelation(
+    input: StorageItemRelationMutationInput!
+  ): StorageItemRelationMutationResponse!
+  UpdateStorageItemRelation(
+    id: Int!
+    input: StorageItemRelationMutationInput!
+  ): StorageItemRelationMutationResponse!
+  DeleteStorageItemRelation(id: Int!): StorageItemRelationMutationResponse!
+}

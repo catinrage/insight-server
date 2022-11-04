@@ -1,0 +1,29 @@
+# Definition
+type Log {
+  id: ID!
+  type: String!
+  message: String!
+  user: User!
+  createdAt: String!
+}
+# Queries
+union LogsListQueryResponse = LogsList | Error
+union LogQueryResponse = Log | Error
+type LogsList {
+  list: [Log!]!
+}
+extend type Query {
+  GetLog(id: Int!): LogQueryResponse
+  ListLogs: LogsListQueryResponse
+}
+# Mutations
+union LogMutationResponse = Log | Error
+input LogMutationInput {
+  type: LogType!
+  message: String!
+  userId: Int!
+}
+extend type Mutation {
+  CreateLog(input: LogMutationInput): LogMutationResponse!
+  DeleteLog(id: Int!): LogMutationResponse!
+}

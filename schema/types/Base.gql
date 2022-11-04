@@ -1,0 +1,52 @@
+scalar Json
+scalar Object
+# define basic types for the schema
+type Error {
+  code: String!
+}
+type Query {
+  _empty: String
+}
+type Mutation {
+  _empty: String
+}
+# schema
+schema {
+  query: Query
+  mutation: Mutation
+}
+# enums
+enum GenericValueType {
+  STRING
+  NUMBER
+  BOOLEAN
+  LIST
+}
+enum LogType {
+  NOTE
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+enum MessageImportanceType {
+  URGENT
+  IMPORTANT
+  ROUTINE
+}
+enum PermissionType {
+  SUDO
+
+  WRITE_STORAGE_CATEGORY
+  WRITE_STORAGE_CATEGORY_FORM_FIELD
+  WRITE_STORAGE_ITEM
+  WRITE_STORAGE_ITEM_RECORD
+  WRITE_STORAGE_ITEM_CONTROLLER
+  WRITE_STORAGE_RELATION
+
+  WRITE_USER
+  WRITE_ROLE
+
+  READ_MESSAGES
+  READ_LOGS
+}

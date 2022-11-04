@@ -1,0 +1,32 @@
+# Definition
+type User {
+  id: ID!
+  username: String!
+  role: Role!
+  logs: [Log!]!
+  sentMessages: MessagesListQueryResponse!
+  receivedMessages: MessagesListQueryResponse
+  # only used to send token after successful login
+  jwt: String
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  GetUser(id: Int!): User
+  ListUsers: [User!]!
+  CurrentUser: User
+}
+# Mutations
+union UserMutationResponse = User | Error
+input UserMutationInput {
+  username: String!
+  password: String!
+  roleId: Int!
+}
+extend type Mutation {
+  CreateUser(input: UserMutationInput!): UserMutationResponse!
+  UpdateUser(id: Int!, input: UserMutationInput!): UserMutationResponse!
+  DeleteUser(id: Int!): UserMutationResponse!
+  Login(username: String!, password: String!): UserMutationResponse!
+}

@@ -1,0 +1,36 @@
+# Definition
+type StorageItem {
+  id: ID!
+  properties: Object!
+  quantity: Int!
+  category: StorageCategory!
+  records: [StorageItemRecord!]!
+  relations: [StorageItemRelation!]!
+  lhsRelations: [StorageItemRelation!]!
+  rhsRelations: [StorageItemRelation!]!
+  controllers: [StorageItemControllerInstance!]!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  ListStorageItems: [StorageItem!]!
+  GetStorageItemsByCategory(category: Int!): [StorageItem!]!
+  GetStorageItem(id: Int!): StorageItem!
+}
+# Mutations
+union StorageItemMutationResponse = StorageItem | Error
+input StorageItemMutationInput {
+  categoryId: Int!
+  properties: Object!
+}
+extend type Mutation {
+  CreateStorageItem(
+    input: StorageItemMutationInput!
+  ): StorageItemMutationResponse!
+  UpdateStorageItem(
+    id: Int!
+    input: StorageItemMutationInput!
+  ): StorageItemMutationResponse!
+  DeleteStorageItem(id: Int!): StorageItemMutationResponse!
+}

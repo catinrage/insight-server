@@ -1,0 +1,37 @@
+# Definition
+type StorageItemControllerBlueprint {
+  id: ID!
+  name: String!
+  script: String!
+  instances: [StorageItemControllerInstance!]!
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  GetStorageItemControllerBlueprint(id: Int!): StorageItemControllerBlueprint!
+  ListStorageItemControllerBlueprints: [StorageItemControllerBlueprint!]!
+  SearchStorageItemControllerBlueprintsByName(
+    id: Int!
+  ): [StorageItemControllerBlueprint!]!
+}
+# Mutations
+union StorageItemControllerBlueprintMutationResponse =
+    StorageItemControllerBlueprint
+  | Error
+input StorageItemControllerBlueprintMutationInput {
+  name: String!
+  script: String!
+}
+extend type Mutation {
+  CreateStorageItemControllerBlueprint(
+    input: StorageItemControllerBlueprintMutationInput!
+  ): StorageItemControllerBlueprintMutationResponse!
+  UpdateStorageItemControllerBlueprint(
+    id: Int!
+    input: StorageItemControllerBlueprintMutationInput!
+  ): StorageItemControllerBlueprintMutationResponse!
+  DeleteStorageItemControllerBlueprint(
+    id: Int!
+  ): StorageItemControllerBlueprintMutationResponse!
+}

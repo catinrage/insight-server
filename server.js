@@ -25,6 +25,10 @@ async function startApolloServer(schema) {
     schema: applyMiddleware(schema, guardian()),
     csrfPrevention: true,
     cache: 'bounded',
+    cors: {
+      origin: '*',
+      credentials: true,
+    },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginLandingPageLocalDefault({ embed: true }),

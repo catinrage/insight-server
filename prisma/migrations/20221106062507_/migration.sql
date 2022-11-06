@@ -29,7 +29,6 @@ CREATE TABLE `StorageCategory` (
     `name` VARCHAR(255) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
-    `formId` INTEGER NULL,
     `parentId` INTEGER NULL,
 
     UNIQUE INDEX `StorageCategory_name_parentId_key`(`name`, `parentId`),
@@ -51,6 +50,15 @@ CREATE TABLE `StorageCategoryFormField` (
 
     UNIQUE INDEX `StorageCategoryFormField_name_key`(`name`),
     PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `StorageCategoryOnStorageCategoryFormField` (
+    `categoryId` INTEGER NOT NULL,
+    `fieldId` INTEGER NOT NULL,
+    `order` INTEGER NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (`categoryId`, `fieldId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -151,15 +159,6 @@ CREATE TABLE `Message` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `_StorageCategoryToStorageCategoryFormField` (
-    `A` INTEGER NOT NULL,
-    `B` INTEGER NOT NULL,
-
-    UNIQUE INDEX `_StorageCategoryToStorageCategoryFormField_AB_unique`(`A`, `B`),
-    INDEX `_StorageCategoryToStorageCategoryFormField_B_index`(`B`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `_StorageItemToStorageItemControllerInstance` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
@@ -173,6 +172,12 @@ ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFE
 
 -- AddForeignKey
 ALTER TABLE `StorageCategory` ADD CONSTRAINT `StorageCategory_parentId_fkey` FOREIGN KEY (`parentId`) REFERENCES `StorageCategory`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `StorageCategoryOnStorageCategoryFormField` ADD CONSTRAINT `StorageCategoryOnStorageCategoryFormField_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `StorageCategory`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `StorageCategoryOnStorageCategoryFormField` ADD CONSTRAINT `StorageCategoryOnStorageCategoryFormField_fieldId_fkey` FOREIGN KEY (`fieldId`) REFERENCES `StorageCategoryFormField`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `StorageItem` ADD CONSTRAINT `StorageItem_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `StorageCategory`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -197,12 +202,6 @@ ALTER TABLE `Message` ADD CONSTRAINT `Message_senderId_fkey` FOREIGN KEY (`sende
 
 -- AddForeignKey
 ALTER TABLE `Message` ADD CONSTRAINT `Message_recipientId_fkey` FOREIGN KEY (`recipientId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_StorageCategoryToStorageCategoryFormField` ADD CONSTRAINT `_StorageCategoryToStorageCategoryFormField_A_fkey` FOREIGN KEY (`A`) REFERENCES `StorageCategory`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `_StorageCategoryToStorageCategoryFormField` ADD CONSTRAINT `_StorageCategoryToStorageCategoryFormField_B_fkey` FOREIGN KEY (`B`) REFERENCES `StorageCategoryFormField`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_StorageItemToStorageItemControllerInstance` ADD CONSTRAINT `_StorageItemToStorageItemControllerInstance_A_fkey` FOREIGN KEY (`A`) REFERENCES `StorageItem`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

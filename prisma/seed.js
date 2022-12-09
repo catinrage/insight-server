@@ -28,7 +28,7 @@ async function main() {
     where: { id: 1 },
     update: {},
     create: {
-      name: 'root',
+      name: 'Root',
       parent: undefined,
     },
   });

@@ -3,6 +3,7 @@ type StorageItemRecord {
   id: ID!
   item: StorageItem!
   quantity: Int!
+  description: String
   createdAt: String!
   updatedAt: String!
 }
@@ -14,8 +15,9 @@ extend type Query {
 # Mutations
 union StorageItemRecordMutationResponse = StorageItemRecord | Error
 input StorageItemRecordMutationInput {
-  item: Int!
+  itemId: Int!
   quantity: Int!
+  description: String
 }
 extend type Mutation {
   CreateStorageItemRecord(

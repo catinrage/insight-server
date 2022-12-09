@@ -29,7 +29,11 @@ module.exports = {
       return record;
     },
     ListStorageItemRecords: async (scope, args, { prisma }) => {
-      const records = await prisma.storageItemRecord.findMany();
+      const records = await prisma.storageItemRecord.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
       return records;
     },
   },
@@ -41,6 +45,14 @@ module.exports = {
             ...args.input,
           },
         });
+        await prisma.storageItem.update({
+          where: {
+            id: args.input.itemId,
+          },
+          data: {
+            quantity: { increment: args.input.quantity },
+          },
+        });
         return storageItemRecord;
       } catch ({ code }) {
         return {
@@ -50,12 +62,30 @@ module.exports = {
     },
     UpdateStorageItemRecord: async (_, args, { prisma }) => {
       try {
+        const storageItemRecordTemp = await prisma.storageItemRecord.findUnique(
+          {
+            where: {
+              id: args.id,
+            },
+          }
+        );
         const storageItemRecord = await prisma.storageItemRecord.update({
           where: {
             id: args.id,
           },
           data: {
             ...args.input,
+          },
+        });
+        await prisma.storageItem.update({
+          where: {
+            id: storageItemRecord.itemId,
+          },
+          data: {
+            quantity: {
+              increment:
+                storageItemRecord.quantity - storageItemRecordTemp.quantity,
+            },
           },
         });
         return storageItemRecord;
@@ -70,6 +100,14 @@ module.exports = {
         const storageItemRecord = await prisma.storageItemRecord.delete({
           where: {
             id: args.id,
+          },
+        });
+        await prisma.storageItem.update({
+          where: {
+            id: storageItemRecord.itemId,
+          },
+          data: {
+            quantity: { increment: -storageItemRecord.quantity },
           },
         });
         return storageItemRecord;

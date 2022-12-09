@@ -96,6 +96,7 @@ module.exports = {
         const storageItem = await prisma.storageItem.create({
           data: {
             ...args.input,
+            propertiesAsString: JSON.stringify(args.input.properties),
           },
         });
         return storageItem;
@@ -113,6 +114,7 @@ module.exports = {
           },
           data: {
             ...args.input,
+            propertiesAsString: JSON.stringify(args.input.properties),
           },
         });
         return storageItem;

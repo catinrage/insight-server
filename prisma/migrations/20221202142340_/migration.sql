@@ -65,12 +65,14 @@ CREATE TABLE `StorageCategoryOnStorageCategoryFormField` (
 CREATE TABLE `StorageItem` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `properties` JSON NOT NULL,
+    `propertiesAsString` VARCHAR(191) NOT NULL DEFAULT '{}',
     `quantity` INTEGER NOT NULL DEFAULT 0,
     `flags` JSON NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `categoryId` INTEGER NOT NULL,
 
+    UNIQUE INDEX `StorageItem_propertiesAsString_key`(`propertiesAsString`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

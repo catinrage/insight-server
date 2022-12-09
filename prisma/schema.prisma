@@ -82,11 +82,12 @@ model StorageCategoryOnStorageCategoryFormField {
 }
 
 model StorageItem {
-  id         Int             @id @default(autoincrement())
-  category   StorageCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  properties Json            @default("{}")
-  quantity   Int             @default(0)
-  flags      Json?           @default("[]")
+  id                 Int             @id @default(autoincrement())
+  category           StorageCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  properties         Json            @default("{}")
+  propertiesAsString String          @default("{}")
+  quantity           Int             @default(0)
+  flags              Json?           @default("[]")
 
   records      StorageItemRecord[]
   controllers  StorageItemControllerInstance[]
@@ -97,6 +98,8 @@ model StorageItem {
   updatedAt DateTime @updatedAt
 
   categoryId Int
+
+  @@unique([categoryId, propertiesAsString])
 }
 
 model StorageItemRelation {
@@ -138,9 +141,10 @@ model StorageItemControllerInstance {
 }
 
 model StorageItemRecord {
-  id       Int         @id @default(autoincrement())
-  item     StorageItem @relation(fields: [itemId], references: [id], onDelete: NoAction)
-  quantity Int         @default(1)
+  id          Int         @id @default(autoincrement())
+  item        StorageItem @relation(fields: [itemId], references: [id], onDelete: NoAction)
+  quantity    Int         @default(1)
+  description String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

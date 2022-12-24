@@ -2,12 +2,15 @@
 type StorageCategory {
   id: ID!
   name: String!
+
   parent: StorageCategory
   fields: [StorageCategoryFormField!]!
   inheritedFields: [StorageCategoryFormField!]!
   children: [StorageCategory!]!
   items: [StorageItem!]!
   nestedItems: [StorageItem!]!
+  generators: [StorageCategoryFormFieldGenerator!]!
+
   createdAt: String!
   updatedAt: String!
 }

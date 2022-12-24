@@ -3,7 +3,9 @@ type Role {
   id: ID!
   name: String!
   permissions: [PermissionType!]!
+
   users: [Role]!
+
   createdAt: String!
   updatedAt: String!
 }

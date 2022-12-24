@@ -3,7 +3,9 @@ type Log {
   id: ID!
   type: String!
   message: String!
+
   user: User!
+
   createdAt: String!
 }
 # Queries

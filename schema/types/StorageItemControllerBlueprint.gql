@@ -3,7 +3,9 @@ type StorageItemControllerBlueprint {
   id: ID!
   name: String!
   script: String!
+
   instances: [StorageItemControllerInstance!]!
+
   createdAt: String!
   updatedAt: String!
 }

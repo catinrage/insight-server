@@ -5,10 +5,12 @@ type StorageCategoryFormField {
   label: String!
   type: GenericValueType!
   required: Boolean!
-  default: String!
   format: String!
   properties: Object
+
   categories: [StorageCategory!]!
+  generators: [StorageCategoryFormFieldGenerator!]!
+
   createdAt: String!
   updatedAt: String!
 }
@@ -34,7 +36,6 @@ input StorageCategoryFormFieldMutationInput {
   label: String!
   type: GenericValueType!
   required: Boolean!
-  default: String!
   format: String!
   properties: Object
 }

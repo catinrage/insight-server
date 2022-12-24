@@ -43,8 +43,9 @@ model StorageCategory {
   parent StorageCategory?                            @relation(name: "BloodLine", fields: [parentId], references: [id], onDelete: Cascade)
   fields StorageCategoryOnStorageCategoryFormField[]
 
-  children StorageCategory[] @relation(name: "BloodLine")
-  items    StorageItem[]
+  children   StorageCategory[]                   @relation(name: "BloodLine")
+  items      StorageItem[]
+  generators StorageCategoryFormFieldGenerator[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -60,9 +61,10 @@ model StorageCategoryFormField {
   label      String           @db.VarChar(255)
   type       GenericValueType
   required   Boolean          @default(true)
-  default    String?          @default("") @db.VarChar(255)
   format     String?          @default("") @db.VarChar(255)
   properties Json?            @default("{}")
+
+  generators StorageCategoryFormFieldGenerator[]
 
   categories StorageCategoryOnStorageCategoryFormField[]
 
@@ -79,6 +81,23 @@ model StorageCategoryOnStorageCategoryFormField {
   order Int @default(0)
 
   @@id([categoryId, fieldId])
+}
+
+model StorageCategoryFormFieldGenerator {
+  id Int @id @default(autoincrement())
+
+  generator String
+
+  category StorageCategory          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  field    StorageCategoryFormField @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  categoryId Int
+  fieldId    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([categoryId, fieldId])
 }
 
 model StorageItem {

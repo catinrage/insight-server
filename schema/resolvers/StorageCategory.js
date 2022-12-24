@@ -114,6 +114,16 @@ module.exports = {
       });
       return output;
     },
+    generators: async (scope, args, { prisma }) => {
+      const generators = await prisma.storageCategory
+        .findUnique({
+          where: {
+            id: scope.id,
+          },
+        })
+        .generators();
+      return generators;
+    },
   },
   StorageCategoryMutationResponse: {
     __resolveType(object, context, info) {

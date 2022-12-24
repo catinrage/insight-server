@@ -6,7 +6,10 @@ async function main() {
   // create admin role
   await prisma.role.upsert({
     where: { name: 'admin' },
-    update: {},
+    update: {
+      name: 'admin',
+      permissions: ['SUDO'],
+    },
     create: {
       name: 'admin',
       permissions: ['SUDO'],
@@ -15,7 +18,12 @@ async function main() {
   // create admin user
   await prisma.user.upsert({
     where: { username: 'admin' },
-    update: {},
+    update: {
+      username: 'admin',
+      // password: admin
+      password: '$2b$12$DMk.E1KyzIVHXl05yJDWruJDkxCfnns6BlVsIXELa2HeQnr26yLeG',
+      roleId: 1,
+    },
     create: {
       username: 'admin',
       // password: admin
@@ -26,7 +34,10 @@ async function main() {
   // create root category
   await prisma.storageCategory.upsert({
     where: { id: 1 },
-    update: {},
+    update: {
+      name: 'Root',
+      parent: undefined,
+    },
     create: {
       name: 'Root',
       parent: undefined,

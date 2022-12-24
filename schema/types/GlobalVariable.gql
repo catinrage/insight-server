@@ -4,6 +4,7 @@ type GlobalVariable {
   name: String!
   type: GenericValueType!
   value: String!
+
   createdAt: String!
   updatedAt: String!
 }

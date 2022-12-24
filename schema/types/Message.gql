@@ -5,8 +5,10 @@ type Message {
   title: String!
   content: String!
   seen: Boolean!
+
   sender: User!
   recipient: User!
+
   createdAt: String!
   updatedAt: String!
 }

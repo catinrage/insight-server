@@ -1,0 +1,39 @@
+# Definition
+type StorageCategoryFormFieldGenerator {
+  id: ID!
+  generator: String!
+
+  category: StorageCategory
+  field: StorageCategoryFormField
+
+  createdAt: String!
+  updatedAt: String!
+}
+# Queries
+extend type Query {
+  GetStorageCategoryFormFieldGenerator(
+    id: Int!
+  ): StorageCategoryFormFieldGenerator
+  ListStorageCategoryFormFieldGenerators: [StorageCategoryFormFieldGenerator!]!
+}
+# Mutations
+union StorageCategoryFormFieldGeneratorMutationResponse =
+    StorageCategoryFormFieldGenerator
+  | Error
+input StorageCategoryFormFieldGeneratorMutationInput {
+  generator: String!
+  categoryId: Int!
+  fieldId: Int!
+}
+extend type Mutation {
+  CreateStorageCategoryFormFieldGenerator(
+    input: StorageCategoryFormFieldGeneratorMutationInput!
+  ): StorageCategoryFormFieldGeneratorMutationResponse!
+  UpdateStorageCategoryFormFieldGenerator(
+    id: Int!
+    input: StorageCategoryFormFieldGeneratorMutationInput!
+  ): StorageCategoryFormFieldGeneratorMutationResponse!
+  DeleteStorageCategoryFormFieldGenerator(
+    id: Int!
+  ): StorageCategoryFormFieldGeneratorMutationResponse!
+}

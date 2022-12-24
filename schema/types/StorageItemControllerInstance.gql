@@ -1,7 +1,9 @@
 # Definition
 type StorageItemControllerInstance {
   id: ID!
+
   blueprint: StorageItemControllerBlueprint!
+
   parameters: Object
   createdAt: String!
   updatedAt: String!

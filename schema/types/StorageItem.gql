@@ -3,12 +3,14 @@ type StorageItem {
   id: ID!
   properties: Object!
   quantity: Int!
+
   category: StorageCategory!
   records: [StorageItemRecord!]!
   relations: [StorageItemRelation!]!
   lhsRelations: [StorageItemRelation!]!
   rhsRelations: [StorageItemRelation!]!
   controllers: [StorageItemControllerInstance!]!
+
   createdAt: String!
   updatedAt: String!
 }

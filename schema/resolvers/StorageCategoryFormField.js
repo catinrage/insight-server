@@ -10,6 +10,16 @@ module.exports = {
         .categories();
       return categories;
     },
+    generators: async (scope, args, { prisma }) => {
+      const generators = await prisma.storageCategoryFormField
+        .findUnique({
+          where: {
+            id: scope.id,
+          },
+        })
+        .generators();
+      return generators;
+    },
   },
   StorageCategoryFormFieldMutationResponse: {
     __resolveType(object, context, info) {

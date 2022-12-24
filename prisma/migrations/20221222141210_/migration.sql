@@ -42,7 +42,6 @@ CREATE TABLE `StorageCategoryFormField` (
     `label` VARCHAR(255) NOT NULL,
     `type` ENUM('STRING', 'NUMBER', 'BOOLEAN', 'LIST') NOT NULL,
     `required` BOOLEAN NOT NULL DEFAULT true,
-    `default` VARCHAR(255) NULL DEFAULT '',
     `format` VARCHAR(255) NULL DEFAULT '',
     `properties` JSON NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -62,6 +61,19 @@ CREATE TABLE `StorageCategoryOnStorageCategoryFormField` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `StorageCategoryFormFieldGenerator` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `generator` VARCHAR(191) NOT NULL,
+    `categoryId` INTEGER NOT NULL,
+    `fieldId` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `StorageCategoryFormFieldGenerator_categoryId_fieldId_key`(`categoryId`, `fieldId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `StorageItem` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `properties` JSON NOT NULL,
@@ -72,7 +84,7 @@ CREATE TABLE `StorageItem` (
     `updatedAt` DATETIME(3) NOT NULL,
     `categoryId` INTEGER NOT NULL,
 
-    UNIQUE INDEX `StorageItem_propertiesAsString_key`(`propertiesAsString`),
+    UNIQUE INDEX `StorageItem_categoryId_propertiesAsString_key`(`categoryId`, `propertiesAsString`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -117,6 +129,7 @@ CREATE TABLE `StorageItemControllerInstance` (
 CREATE TABLE `StorageItemRecord` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `quantity` INTEGER NOT NULL DEFAULT 1,
+    `description` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `itemId` INTEGER NOT NULL,
@@ -180,6 +193,12 @@ ALTER TABLE `StorageCategoryOnStorageCategoryFormField` ADD CONSTRAINT `StorageC
 
 -- AddForeignKey
 ALTER TABLE `StorageCategoryOnStorageCategoryFormField` ADD CONSTRAINT `StorageCategoryOnStorageCategoryFormField_fieldId_fkey` FOREIGN KEY (`fieldId`) REFERENCES `StorageCategoryFormField`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `StorageCategoryFormFieldGenerator` ADD CONSTRAINT `StorageCategoryFormFieldGenerator_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `StorageCategory`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `StorageCategoryFormFieldGenerator` ADD CONSTRAINT `StorageCategoryFormFieldGenerator_fieldId_fkey` FOREIGN KEY (`fieldId`) REFERENCES `StorageCategoryFormField`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `StorageItem` ADD CONSTRAINT `StorageItem_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `StorageCategory`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

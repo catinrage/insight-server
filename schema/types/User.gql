@@ -2,10 +2,12 @@
 type User {
   id: ID!
   username: String!
+
   role: Role!
   logs: [Log!]!
   sentMessages: MessagesListQueryResponse!
   receivedMessages: MessagesListQueryResponse
+
   # only used to send token after successful login
   jwt: String
   createdAt: String!

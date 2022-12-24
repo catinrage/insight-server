@@ -1,7 +1,9 @@
 # Definition
 type StorageItemRecord {
   id: ID!
+
   item: StorageItem!
+
   quantity: Int!
   description: String
   createdAt: String!

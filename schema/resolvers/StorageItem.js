@@ -86,7 +86,11 @@ module.exports = {
       return item;
     },
     ListStorageItems: async (scope, args, { prisma }) => {
-      const items = await prisma.storageItem.findMany();
+      const items = await prisma.storageItem.findMany({
+        orderBy: {
+          updatedAt: 'desc',
+        },
+      });
       return items;
     },
   },

@@ -86,7 +86,7 @@ model StorageCategoryOnStorageCategoryFormField {
 model StorageCategoryFormFieldGenerator {
   id Int @id @default(autoincrement())
 
-  generator String
+  generator String @db.VarChar(600)
 
   category StorageCategory          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   field    StorageCategoryFormField @relation(fields: [fieldId], references: [id], onDelete: Cascade)

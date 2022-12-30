@@ -23,7 +23,6 @@ module.exports = {
   },
   StorageCategoryFormFieldGeneratorMutationResponse: {
     __resolveType(object, context, info) {
-      console.log(object);
       if (object.fieldId) {
         return 'StorageCategoryFormFieldGenerator';
       }

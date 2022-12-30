@@ -106,7 +106,7 @@ module.exports = {
             },
           },
         });
-        output = [...output, ...parent.fields];
+        output = [...parent.fields, ...output];
         parentId = parent.parentId;
       }
       output = output.map((field) => {

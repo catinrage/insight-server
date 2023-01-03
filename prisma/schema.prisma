@@ -104,7 +104,7 @@ model StorageItem {
   id                 Int             @id @default(autoincrement())
   category           StorageCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   properties         Json            @default("{}")
-  propertiesAsString String          @default("{}")
+  propertiesAsString String          @default("{}") @db.VarChar(650)
   quantity           Int             @default(0)
   flags              Json?           @default("[]")
 
